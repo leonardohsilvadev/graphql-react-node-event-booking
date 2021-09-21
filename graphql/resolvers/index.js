@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 
 const Event = require('../../models/event')
 const User = require('../../models/user')
+const Booking = require('../../models/booking')
 
 const events = async eventIds => {
   try {
@@ -11,6 +12,15 @@ const events = async eventIds => {
       date: new Date(_doc.date).toISOString(),
       creator: user.bind(this, creator)
     }))
+  } catch (err) {
+    throw err
+  }
+}
+
+const singleEvent = async eventId => {
+  try {
+    const event = await Event.findById(eventId)
+    return { ...event._doc, creator: user.bind(this, event.creator) }
   } catch (err) {
     throw err
   }
@@ -37,6 +47,20 @@ module.exports = {
         ..._doc,
         date: new Date(_doc.date).toISOString(),
         creator: user.bind(this, _doc.creator)
+      }))
+    } catch (err) {
+      throw err
+    }
+  },
+  bookings: async () => {
+    try {
+      const bookings = await Booking.find()
+      return bookings.map(({ _doc }) => ({
+        ..._doc,
+        user: user.bind(this, _doc.user),
+        event: singleEvent.bind(this, _doc.event),
+        createdAt: new Date(_doc.createdAt.toISOString()),
+        updatedAt: new Date(_doc.updatedAt.toISOString())
       }))
     } catch (err) {
       throw err
@@ -89,6 +113,32 @@ module.exports = {
       const { _doc } = await user.save()
     
       return { ..._doc, password: null }
+    } catch (err) {
+      throw err
+    }
+  },
+  bookEvent: async ({ eventId }) => {
+    const event = await Event.findOne({ _id: eventId })
+    const booking = new Booking({
+      user: '6140a79d1e1bde677ffe1d81',
+      event
+    })
+
+    const { _doc } = await booking.save()
+    return {
+      ..._doc,
+      user: user.bind(this, _doc.user),
+      event: singleEvent.bind(this, _doc.event),
+      createdAt: new Date(_doc.createdAt.toISOString()),
+      updatedAt: new Date(_doc.updatedAt.toISOString())
+    }
+  },
+  cancelBooking: async ({ bookingId }) => {
+    try {
+      const booking = await Booking.findById(bookingId).populate('event')
+      const event = { ...booking.event._doc, creator: user.bind(this, booking.event._doc.creator) }
+      await Booking.deleteOne({ _id: bookingId })
+      return event
     } catch (err) {
       throw err
     }
