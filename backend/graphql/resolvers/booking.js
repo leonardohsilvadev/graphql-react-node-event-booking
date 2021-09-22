@@ -5,7 +5,7 @@ const { transformBooking, transformEvent } = require('./merge')
 module.exports = {
   bookings: async (_, { isAuth, userId }) => {
     if (!isAuth) {
-      throw new Error('Unauthorized!') 
+      throw new Error('Unauthorized!')
     }
 
     try {
@@ -17,7 +17,7 @@ module.exports = {
   },
   bookEvent: async ({ eventId }, { isAuth }) => {
     if (!isAuth) {
-      throw new Error('Unauthorized!') 
+      throw new Error('Unauthorized!')
     }
 
     const event = await Event.findOne({ _id: eventId })
@@ -31,7 +31,7 @@ module.exports = {
   },
   cancelBooking: async ({ bookingId }, { isAuth }) => {
     if (!isAuth) {
-      throw new Error('Unauthorized!') 
+      throw new Error('Unauthorized!')
     }
 
     try {
