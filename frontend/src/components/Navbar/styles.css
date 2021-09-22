@@ -1,0 +1,44 @@
+.main-navigation {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 3.5rem;
+  background-color: rgb(152, 56, 152);
+  background: linear-gradient(to left, rgb(138, 17, 138) 50%, rgb(209, 68, 237) 100%);
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.main-navigation-logo h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.main-navigation-item {
+  margin-left: 1.5rem;
+}
+
+.main-navigation-item ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.main-navigation-item li {
+  margin: 0 1rem;
+}
+
+.main-navigation-item a {
+  text-decoration: none;
+  color:rgb(247, 128, 64);
+  font-weight: bold;
+}
+
+.main-navigation-item a:hover,
+.main-navigation-item a:active,
+.main-navigation-item a.active {
+  color:rgb(239, 157, 255);
+}
