@@ -1,72 +1,40 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { LOGIN, CREATE_USER } from '../../querys'
+import AuthContext from '../../context/authContext'
+
 import "./styles.css"
 
 export default function Auth() {
-  const [isLogin, setIsLogin] = useState(false)
+  const [isLogin, setIsLogin] = useState(true)
+
+  const context = useContext(AuthContext)
+
+  const [login, user] = useLazyQuery(LOGIN)
+  const [signup, newUser] = useMutation(CREATE_USER)
+
   const { register, handleSubmit, formState: { errors } } = useForm()
-  const [login, { loading, error, data }] = useLazyQuery(LOGIN)
-  const [signup, user] = useMutation(CREATE_USER)
 
-  console.log('data: ', data)
-  console.log('error: ', error)
+  if (user.data?.login) {
+    context.login(
+      user.data?.login?.token,
+      user.data?.login?.userId,
+      user.data?.login?.tokenExpiration
+    )
+  }
 
-  console.log('data user: ', user.data)
-  console.log('error user: ', user.error)
+  user.error && console.log('error: ', user.error)
+
+  console.log('data user: ', newUser.data)
+  console.log('error user: ', newUser.error)
 
   const onSignup = ({ email, password }) => {
     signup({ variables: { email, password } })
-
-    // const body = {
-    //   query: `
-    //     mutation {
-    //       createUser(userInput: { email: "${email}", password: "${password}" }) {
-    //         _id
-    //         email
-    //       }
-    //     }
-    //   `
-    // }
-
-    // fetch('http://localhost:4000/graphql', {
-    //   method: 'POST',
-    //   body: JSON.stringify(body),
-    //   headers : {
-    //     'Content-Type': 'application/json'
-    //   }
-    // })
-    // .then(res => res.status === 200 && res.json())
-    // .then(data => console.log('data: ', data))
-    // .catch(err => console.log('err:', err))
   }
 
   const onLogin = ({ email, password }) => {
     login({ variables: { email, password } })
-
-    // const body = {
-    //   query: `
-    //     query {
-    //       login(email: "${email}", password: "${password}") {
-    //         userId
-    //         token
-    //         tokenExpiration
-    //       }
-    //     }
-    //   `
-    // }
-
-    // fetch('http://localhost:4000/graphql', {
-    //   method: 'POST',
-    //   body: JSON.stringify(body),
-    //   headers : {
-    //     'Content-Type': 'application/json'
-    //   }
-    // })
-    // .then(res => res.status === 200 && res.json())
-    // .then(data => console.log('data: ', data))
-    // .catch(err => console.log('err:', err))
   }
 
   const onChangeMode = () => setIsLogin(!isLogin)
