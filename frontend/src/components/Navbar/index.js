@@ -5,7 +5,7 @@ import AuthContext from '../../context/authContext'
 import './styles.css'
 
 const Navbar = () => {
-  const { token } = useContext(AuthContext)
+  const { token, logout } = useContext(AuthContext)
 
   return (
       <header className="main-navigation">
@@ -16,19 +16,24 @@ const Navbar = () => {
         <nav className="main-navigation-item">
           <ul>
             {!token ? (
-              <>
               <li>
                 <NavLink to="/auth">Login</NavLink>
               </li>
-              </>
             ) : (
-              <li>
-                <NavLink to="/bookings">Bookings</NavLink>
-              </li>
+              <>
+                <li>
+                  <NavLink to="/bookings">Bookings</NavLink>
+                </li>
+              </>
             )}
             <li>
               <NavLink to="/events">Events</NavLink>
             </li>
+            {token &&
+              <li>
+              <button onClick={logout}>Logout</button>
+              </li>
+            }
           </ul>
         </nav>
       </header>

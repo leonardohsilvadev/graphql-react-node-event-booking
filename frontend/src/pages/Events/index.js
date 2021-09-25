@@ -1,3 +1,25 @@
+import { useState } from 'react'
+import { Backdrop, Modal } from '../../components'
+
+import './styles.css'
+
 export default function Events() {
-  return <h1>Events Page</h1>
+  const [isAdd, setIsAdd] = useState(false)
+
+  return (
+    <>
+    {isAdd && (
+      <>
+        <Backdrop />
+        <Modal title="Add Event" onCancel={() => setIsAdd(false)}>
+          <p>Modal content</p>
+        </Modal>
+      </>
+    )}
+    <div className="events-container">
+      <p>Share your own Events!</p>
+      <button className="btn" onClick={() => setIsAdd(true)}>Create Event</button>
+    </div>
+    </>
+  )
 }

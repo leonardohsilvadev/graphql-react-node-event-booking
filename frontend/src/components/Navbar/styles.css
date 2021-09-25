@@ -31,14 +31,21 @@
   margin: 0 1rem;
 }
 
-.main-navigation-item a {
+.main-navigation-item a,
+.main-navigation-item button {
   text-decoration: none;
   color:rgb(247, 128, 64);
   font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
 }
 
 .main-navigation-item a:hover,
 .main-navigation-item a:active,
-.main-navigation-item a.active {
+.main-navigation-item a.active,
+.main-navigation-item button:active,
+.main-navigation-item button:hover {
   color:rgb(239, 157, 255);
 }

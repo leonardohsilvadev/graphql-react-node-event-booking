@@ -32,17 +32,18 @@ function App() {
             <Switch>
               {!token ? (
                 <>
-                  <Redirect from="/" to="/auth" exact />
+                  <Redirect to="/auth" exact />
                   <Route path="/auth" component={Auth} />
+                  <Route path="/events" component={Events} />
                 </>
               ) : (
                 <>
                   <Redirect from="/" to="/events" exact />
+                  <Redirect from="/auth" to="events" exact />
                   <Route path="/bookings" component={Bookings} />
+                  <Route path="/events" component={Events} />
                 </>
-              )
-              }
-              <Route path="/events" component={Events} />
+              )}
             </Switch>
           </main>
         </AuthContext.Provider>

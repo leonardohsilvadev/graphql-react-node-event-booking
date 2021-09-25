@@ -17,20 +17,3 @@
 .form-control {
   margin: 1rem 0;
 }
-
-.form-actions button {
-  background-color: rgb(157, 122, 255);
-  font: inherit;
-  color: white;
-  border: 2px solid rgb(148, 56, 235);
-  border-radius: 3px;
-  padding: 0.5rem 1rem;
-  margin-right: 1rem;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.26);
-  cursor: pointer;
-}
-
-.form-actions button:hover,
-.form-actions button:active {
-  background: rgb(216, 175, 255);
-}
