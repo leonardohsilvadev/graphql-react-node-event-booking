@@ -1,16 +1,21 @@
 import './styles.css'
 
-const Modal = ({ title, children, onCancel, onConfirm }) => (
-  <div className="modal-container">
-    <header class="modal-header">
-      <h1>{title}</h1>
-    </header>
-    <section className="modal-content">{children}</section>
-    <section className="modal-actions">
-      <button class="btn" onClick={onCancel}>Cancel</button>
-      <button class="btn" onClick={onConfirm}>Confirm</button>
-    </section>
-  </div>
-)
+const FormOrDiv = props => props.onSubmit ? <form {...props}></form> : <div {...props}></div>
+
+const Modal = ({ title, children, onCancel, onConfirm, onSubmit }) => {
+
+  return (
+    <FormOrDiv className="modal-container" {...onSubmit && { onSubmit }}>
+      <header className="modal-header">
+        <h1>{title}</h1>
+      </header>
+      <section className="modal-content">{children}</section>
+      <section className="modal-actions">
+        <button className="btn" onClick={onCancel}>Cancel</button>
+        <button className="btn" onClick={onConfirm} {...onSubmit && { type: 'submit' } }>Confirm</button>
+      </section>
+    </FormOrDiv>
+  )
+}
 
 export default Modal

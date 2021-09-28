@@ -3,17 +3,3 @@
   max-width: 80%;
   margin: 5rem auto;
 }
-
-.form-control label,
-.form-control input {
-  width: 100%;
-  display: block;
-}
-
-.form-control label {
-  margin-bottom: 0.5rem;
-}
-
-.form-control {
-  margin: 1rem 0;
-}

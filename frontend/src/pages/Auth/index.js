@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { LOGIN, CREATE_USER } from '../../querys'
 import AuthContext from '../../context/authContext'
+import { required } from '../../validators/validators'
 
 import "./styles.css"
 
@@ -27,19 +28,19 @@ export default function Auth() {
 
       <div className="form-control">
         <label htmlFor="email">E-mail</label>
-        <input type="email" {...register('email', { required: { value: true, message: 'This field is required' } })} />
+        <input type="email" {...register('email', { required })} />
         {errors.email && errors.email.message && <label class="error-label">{errors.email.message}</label>}
       </div>
 
       <div className="form-control">
         <label htmlFor="password">Password</label>
-        <input type="password" {...register('password', { required: { value: true, message: 'This field is required' } })} />
+        <input type="password" {...register('password', { required })} />
         {errors.password && errors.password.message && <label class="error-label">{errors.password.message}</label>}
       </div>
 
       <div className="form-actions">
-        <button class="btn" type="submit">Login</button>
-        <button class="btn" type="button" onClick={onChangeMode}>Switch to {isLogin ? 'Signup' : 'Login'}</button>
+        <button className="btn" type="submit">Login</button>
+        <button className="btn" type="button" onClick={onChangeMode}>Switch to {isLogin ? 'Signup' : 'Login'}</button>
       </div>
     </form>
   );

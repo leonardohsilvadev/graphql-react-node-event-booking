@@ -4,6 +4,21 @@ body {
   font-family: sans-serif;
 }
 
+.form-control label,
+.form-control input,
+.form-control textarea {
+  width: 100%;
+  display: block;
+}
+
+.form-control label {
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  margin: 1rem 0;
+}
+
 .btn {
   background-color: rgb(157, 122, 255);
   font: inherit;
