@@ -8,6 +8,10 @@ const EVENTS = gql`
       description
       price
       date
+      creator {
+        _id
+        email
+      }
     }
   }
 `

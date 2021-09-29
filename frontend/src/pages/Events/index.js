@@ -2,16 +2,19 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Backdrop, Modal } from '../../components'
+import { Backdrop, Modal, Spinner } from '../../components'
 import { CREATE_EVENT, EVENTS } from '../../querys'
 import { required } from '../../validators/validators'
 import authContext from '../../context/authContext'
 
 import './styles.css'
+import { Card } from './components/Card'
 
 export default function Events() {
   const [isAdd, setIsAdd] = useState(false)
-  const { token } = useContext(authContext)
+  const [isDetails, setIsDetails] = useState(false)
+  const [selectedEvent, setSelectedEvent] = useState({})
+  const { token, userId } = useContext(authContext)
   const events = useQuery(EVENTS)
   const [createEvent, createdEvent] = useMutation(CREATE_EVENT)
   const { register, handleSubmit, formState: { errors }, reset } = useForm()
@@ -22,6 +25,18 @@ export default function Events() {
       context: { headers: { 'Authorization': `Bearer ${token}` } }
     })
   }
+
+  const handleDetails = event => {
+    setIsDetails(true)
+    setSelectedEvent(events?.data?.events.find(e => e._id === event._id))
+  }
+
+  const handleCancelDetails = () => {
+    setIsDetails(false)
+    setSelectedEvent({})
+  }
+
+  const handleBookEvent = () => {}
 
   useEffect(() => {
     if (createdEvent.data) {
@@ -37,7 +52,6 @@ export default function Events() {
         <>
           <Backdrop />
           <Modal title="Add Event" onCancel={() => setIsAdd(false)} onSubmit={handleSubmit(onSubmit)}>
-            <div>
               <div className="form-control">
                 <label htmlFor="title">Title</label>
                 <input type="text" {...register('title', { required })} />
@@ -61,10 +75,21 @@ export default function Events() {
                 <input type="datetime-local" {...register('date', { required })} />
                 {errors.date && errors.date.message && <label class="error-label">{errors.date.message}</label>}
               </div>
-            </div>
           </Modal>
         </>
       )}
+
+      {isDetails && (
+        <>
+        <Backdrop />
+        <Modal title={selectedEvent?.title} onCancel={handleCancelDetails} onConfirm={handleBookEvent}>
+          <p>{selectedEvent?.description}</p>
+          <p>${selectedEvent?.price} - {new Date(selectedEvent?.date).toLocaleDateString()}</p>
+        </Modal>
+        </>
+      )}
+
+
       {token && (
         <div className="events-container">
           <p>Share your own Events!</p>
@@ -72,10 +97,15 @@ export default function Events() {
         </div>
       )}
 
-      {events?.data?.events.length > 0 && events?.data?.events.map(e => (
-        <ul key={e._id} className="events-list">
-          <li className="events-list-item">{e.title}</li>
-        </ul>
+      {events?.loading && <Spinner />}
+
+      {events?.data?.events.length > 0 && events?.data?.events.map(event => (
+        <Card
+          key={event._id}
+          event={event}
+          userId={userId}
+          onDetails={() => handleDetails(event)}
+        />
       ))}
     </>
   )
