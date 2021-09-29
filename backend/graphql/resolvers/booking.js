@@ -3,7 +3,7 @@ const Event = require('../../models/event')
 const { transformBooking, transformEvent } = require('./merge')
 
 module.exports = {
-  bookings: async (_, { isAuth, userId }) => {
+  bookings: async (_, { isAuth }) => {
     if (!isAuth) {
       throw new Error('Unauthorized!')
     }
@@ -15,7 +15,7 @@ module.exports = {
       throw err
     }
   },
-  bookEvent: async ({ eventId }, { isAuth }) => {
+  bookEvent: async ({ eventId }, { isAuth, userId }) => {
     if (!isAuth) {
       throw new Error('Unauthorized!')
     }

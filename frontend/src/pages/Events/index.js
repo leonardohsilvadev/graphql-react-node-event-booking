@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Backdrop, Modal, Spinner } from '../../components'
-import { CREATE_EVENT, EVENTS } from '../../querys'
+import { BOOK_EVENT, CREATE_EVENT, EVENTS } from '../../querys'
 import { required } from '../../validators/validators'
 import authContext from '../../context/authContext'
 
@@ -11,14 +11,17 @@ import './styles.css'
 import { Card } from './components/Card'
 
 export default function Events() {
+  // * DECLARATIONS
   const [isAdd, setIsAdd] = useState(false)
   const [isDetails, setIsDetails] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState({})
   const { token, userId } = useContext(authContext)
   const events = useQuery(EVENTS)
   const [createEvent, createdEvent] = useMutation(CREATE_EVENT)
+  const [bookEvent, bookedEvent] = useMutation(BOOK_EVENT)
   const { register, handleSubmit, formState: { errors }, reset } = useForm()
 
+  // * FUNCTIONS
   const onSubmit = ({ title, description, price, date }) => {
     createEvent({
       variables: { title, description, price: +price, date },
@@ -36,7 +39,17 @@ export default function Events() {
     setSelectedEvent({})
   }
 
-  const handleBookEvent = () => {}
+  const handleBookEvent = () => {
+    bookEvent({
+      variables: { eventId: selectedEvent._id },
+      context: { headers: { 'Authorization': `Bearer ${token}` } }
+    })
+    setIsDetails(false)
+    setSelectedEvent({})
+  }
+
+  bookedEvent.data && console.log('booked data: ', bookedEvent.data)  
+  bookedEvent.error && console.log('booked error: ', bookedEvent.error)
 
   useEffect(() => {
     if (createdEvent.data) {
@@ -82,7 +95,7 @@ export default function Events() {
       {isDetails && (
         <>
         <Backdrop />
-        <Modal title={selectedEvent?.title} onCancel={handleCancelDetails} onConfirm={handleBookEvent}>
+        <Modal title={selectedEvent?.title} onCancel={handleCancelDetails} {...token && { onConfirm: handleBookEvent }}>
           <p>{selectedEvent?.description}</p>
           <p>${selectedEvent?.price} - {new Date(selectedEvent?.date).toLocaleDateString()}</p>
         </Modal>
