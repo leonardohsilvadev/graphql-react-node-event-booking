@@ -2,13 +2,12 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Backdrop, Modal, Spinner } from '../../components'
+import { Backdrop, Modal, Spinner, Card } from '../../components'
 import { BOOK_EVENT, CREATE_EVENT, EVENTS } from '../../querys'
 import { required } from '../../validators/validators'
 import authContext from '../../context/authContext'
 
 import './styles.css'
-import { Card } from './components/Card'
 
 export default function Events() {
   // * DECLARATIONS
@@ -110,14 +109,17 @@ export default function Events() {
         </div>
       )}
 
-      {events?.loading && <Spinner />}
-
-      {events?.data?.events.length > 0 && events?.data?.events.map(event => (
+      {events?.loading ? <Spinner /> :
+      events?.data?.events.length > 0 && events?.data?.events.map(event => (
         <Card
           key={event._id}
           event={event}
           userId={userId}
-          onDetails={() => handleDetails(event)}
+          title={event.title}
+          subtitle={`${event.price} - ${new Date(event.date).toLocaleDateString()}`}
+          buttonText="View Details"
+          onClick={() => handleDetails(event)}
+          {...userId === event.creator._id && { buttonText: `View Details (Owner)` }}
         />
       ))}
     </>

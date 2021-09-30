@@ -1,6 +1,6 @@
 import { LOGIN, CREATE_USER } from './user'
 import { EVENTS, CREATE_EVENT } from './events'
-import { BOOKS, BOOK_EVENT } from './bookings'
+import { BOOKS, BOOK_EVENT, CANCEL_BOOKING } from './bookings'
 
 export {
   LOGIN,
@@ -8,5 +8,6 @@ export {
   EVENTS,
   CREATE_EVENT,
   BOOKS,
-  BOOK_EVENT
+  BOOK_EVENT,
+  CANCEL_BOOKING
 }

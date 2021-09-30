@@ -12,7 +12,7 @@ const Modal = ({ title, children, onCancel, onConfirm, onSubmit }) => {
       <section className="modal-content">{children}</section>
       <section className="modal-actions">
         {onCancel && <button className="btn" onClick={onCancel}>Cancel</button>}
-        {onConfirm && <button className="btn" onClick={onConfirm} {...onSubmit && { type: 'submit' } }>Confirm</button>}
+        {(onConfirm || onSubmit) && <button className="btn" onClick={onConfirm} {...onSubmit && { type: 'submit' } }>Confirm</button>}
       </section>
     </FormOrDiv>
   )

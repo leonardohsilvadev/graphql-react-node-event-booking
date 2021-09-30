@@ -23,4 +23,17 @@ const BOOK_EVENT = gql`
   }
 `
 
-export { BOOK_EVENT, BOOKS }
+const CANCEL_BOOKING = gql`
+  mutation CancelBooking($bookingId: ID!) {
+    cancelBooking(bookingId: $bookingId) {
+      _id
+      title
+      creator {
+        _id
+        email
+      }
+    }
+  }
+`
+
+export { BOOKS, BOOK_EVENT, CANCEL_BOOKING }
