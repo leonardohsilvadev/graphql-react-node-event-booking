@@ -3,13 +3,13 @@ const Event = require('../../models/event')
 const { transformBooking, transformEvent } = require('./merge')
 
 module.exports = {
-  bookings: async (_, { isAuth }) => {
+  bookings: async (_, { isAuth, userId }) => {
     if (!isAuth) {
       throw new Error('Unauthorized!')
     }
 
     try {
-      const bookings = await Booking.find()
+      const bookings = await Booking.find({ user: userId })
       return bookings.map(booking => transformBooking(booking))
     } catch (err) {
       throw err
