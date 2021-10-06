@@ -1,6 +1,7 @@
+const DataLoader = require('dataloader')
+
 const Event = require('../../models/event')
 const User = require('../../models/user')
-const DataLoader = require('dataloader')
 const { dateToString } = require ('../../helpers/date')
 
 const eventLoader = new DataLoader(eventIds => events(eventIds))
@@ -30,7 +31,7 @@ const user = async userId => {
     const { _doc } = await userLoader.load(userId.toString())
     return {
       ..._doc,
-      createdEvents: () => eventLoader.loadMany.bind(this, _doc.createdEvents)
+      createdEvents: () => eventLoader.loadMany(_doc.createdEvents)
     }
   } catch (err) {
     throw err
