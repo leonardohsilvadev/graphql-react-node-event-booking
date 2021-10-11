@@ -11,6 +11,7 @@ const userLoader = new DataLoader(userIds => User.find({ _id: { $in: userIds } }
 const events = async eventIds => {
   try {
     const events = await Event.find({ _id: { $in: eventIds } })
+    events.sort((a,b) => eventIds.indexOf(a._id.toString()) - eventIds.indexOf(b._id.toString()))
     return events.map(event => transformEvent(event))
   } catch (err) {
     throw err
